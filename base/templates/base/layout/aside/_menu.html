@@ -1,0 +1,111 @@
+{% with comptes=user.active_accounts %}
+	<!--begin::Aside Menu-->
+	<div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu" data-kt-scroll-offset="0">
+		<!--begin::Menu-->
+		<div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true">
+			<div class="menu-item">
+				<a class="menu-link {% if active_item == 'dashboard' %}active{% endif %}" href="{% url 'base:dashboard' %}">
+					<span class="menu-icon">
+						<i class="bi bi-house fs-3"></i>
+					</span>
+					<span class="menu-title">Accueil</span>
+				</a>
+			</div>
+			<div class="menu-item">
+				<div class="menu-content pt-8 pb-2">
+					<span class="menu-section text-muted text-uppercase fs-8 ls-1">{% if comptes|length == 1 %}Mon compte{% else %}Mes comptes{% endif %}</span>
+				</div>
+			</div>
+			{% for c in comptes %}
+				{% comment %} <div class="menu-item">
+					<a class="menu-link {% if active_item == 'order_add' and compte.id == c.id %}active{% endif %}" href="{% url 'base:order_add' c.pk %}">
+						<span class="menu-icon">
+							<i class="bi bi-app-indicator fs-3"></i>
+						</span>
+						<span class="menu-title">Passer commande</span>
+					</a>
+				</div>
+				<div class="menu-item">
+					<a class="menu-link {% if active_item == 'order_list' and compte.id == c.id  %}active{% endif %}" href="{% url 'base:order_list' c.pk %}">
+						<span class="menu-icon">
+							<i class="bi bi-app-indicator fs-3"></i>
+						</span>
+						<span class="menu-title">Suivi de commandes</span>
+					</a>
+				</div> {% endcomment %}
+				<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if comptes|length == 1 or compte.id == c.id %}hover show{% endif %}">
+					<span class="menu-link">
+						{% comment %} <span class="menu-icon">
+							<i class="bi bi-caret-right fs-2"></i>
+						</span> {% endcomment %}
+						<span class="menu-title">{{ c.nom }}</span>
+						<span class="menu-arrow"></span>
+					</span>
+					<div class="menu-sub menu-sub-accordion menu-active-bg">
+						<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+							{% if c.can_add_commande %}
+								<div class="menu-item">
+									<a class="menu-link {% if active_item == 'order_add' and compte.id == c.id %}active{% endif %}" href="{% url 'base:order_add' c.pk %}">
+										<span class="menu-bullet">
+											<span class="bullet bullet-dot"></span>
+										</span>
+										<span class="menu-title">Nouvelle commande</span>
+									</a>
+								</div>
+							{% endif %}
+							{% if c.can_view_commade_list %}
+								<div class="menu-item">
+									<a class="menu-link {% if active_item == 'order_list' and compte.id == c.id  %}active{% endif %}" href="{% url 'base:order_list' c.pk %}">
+										<span class="menu-bullet">
+											<span class="bullet bullet-dot"></span>
+										</span>
+										<span class="menu-title">Suivi des commandes</span>
+									</a>
+								</div>
+							{% endif %}
+							{% if c.can_view_facture_list %}
+								<div class="menu-item">
+									<a class="menu-link {% if active_item == 'facture_list' and compte.id == c.id  %}active{% endif %}" href="{% url 'base:facture_list' c.pk %}">
+										<span class="menu-bullet">
+											<span class="bullet bullet-dot"></span>
+										</span>
+										<span class="menu-title">Mes Factures</span>
+									</a>
+								</div>
+							{% endif %}
+							{% if c.can_view_releve_compte_list %}
+								<div class="menu-item">
+									<a class="menu-link {% if active_item == 'releve_compte_list' and compte.id == c.id  %}active{% endif %}" href="{% url 'base:releve_compte_list' c.pk %}">
+										<span class="menu-bullet">
+											<span class="bullet bullet-dot"></span>
+										</span>
+										<span class="menu-title">Postes non soldés</span>
+									</a>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+					
+				</div>
+				{% comment %} <div class="menu-item">
+					<a class="menu-link" href="?page=landing">
+						<span class="menu-icon">
+							<i class="bi bi-app-indicator fs-3"></i>
+						</span>
+						<span class="menu-title">Mes factures</span>
+					</a>
+				</div>
+				<div class="menu-item">
+					<a class="menu-link" href="?page=landing">
+						<span class="menu-icon">
+							<i class="bi bi-app-indicator fs-3"></i>
+						</span>
+						<span class="menu-title">Factures non soldées</span>
+					</a>
+				</div> {% endcomment %}
+			{% endfor %}
+
+		</div>
+		<!--end::Menu-->
+	</div>
+{% endwith %}

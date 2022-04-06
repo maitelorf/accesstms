@@ -1,0 +1,287 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% block title %}Nouvelle commande | {% endblock %}
+
+
+{% block css %} 
+{% endblock css %}
+
+{% block toolbar %}
+    <!--begin::Page title-->
+    <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+        
+        {% comment %} <!--begin::Title-->
+        <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Nouvelle commande</h1>
+        <!--end::Title--> {% endcomment %}
+        {% comment %} <!--begin::Separator-->
+        <span class="h-20px border-gray-200 border-start mx-4"></span>
+        <!--end::Separator--> {% endcomment %}
+        <!--begin::Breadcrumb-->
+        <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+
+            {% comment %} <!--begin::Item-->
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <!--end::Item--> {% endcomment %}
+            <!--begin::Item-->
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'base:order_list' compte.pk %}" class="text-muted text-hover-primary">{{compte.nom}}</a>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="breadcrumb-item text-dark">Nouvelle commande</li>
+            <!--end::Item-->
+        </ul>
+        <!--end::Breadcrumb-->	          
+    </div>					
+{% endblock %}
+
+{% block content %}
+    <div class="card ">
+        <!--begin::Card header-->
+        <div class="card-header" >
+            <!--begin::Card title-->
+            <div class="card-title">
+                <h3 class="fw-bolder m-0">Nouvelle commande</h3>
+            </div>
+            <!--end::Card title-->
+        </div>
+        <!--begin::Card header-->
+        <!--begin::Content-->
+        <div id="kt_account_profile_details">
+            <!--begin::Form-->
+            <form action="" class="form" method="post" id="kt_order_form" autocomplete=off>
+                {% csrf_token %}
+                <!--begin::Body-->
+                <div class="card-body p-lg-10">
+                    {% if messages %}
+                        <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
+                                {% for message in messages %}
+                                    <div {% if message.tags %} class="d-flex align-items-center bg-light-{{ message.tags }} rounded p-5 mb-7"{% endif %}  role="alert" style="width: 100%;"><b>{{ message }}</b></div>
+                                {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% comment %} Cas des erreurs sur le formulaire {% endcomment %}
+                    {% if form.non_field_errors  %}
+                        <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
+                            <div class="d-flex align-items-center bg-light-danger rounded p-5 mb-7" role="alert" style="width: 100%;"><b>{{ form.non_field_errors }}</b></div>
+                        </div>
+                    {% endif %}
+                    <!--begin::Layout-->
+                    <div class="d-flex flex-column flex-lg-row">
+                        <!--begin::Content-->
+                        <div class="flex-lg-row-fluid me-0">
+                                {% comment %} <h3 class="card-title align-items-start flex-column">
+                                    <span class="fw-bolder mb-2 text-dark">Informations générales</span>
+                                </h3> {% endcomment %}
+                                <!--begin::Input group-->
+                                <div class="row mb-5">
+                                    <!--begin::Col-->
+                                    <div class="col-md-6 fv-row fv-plugins-icon-container">
+                                        <!--begin::Label-->
+                                        <label class="required fs-5 fw-bold mb-2">Référence</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        {{form.reference}}
+                                        <div class="fv-plugins-message-container invalid-feedback">
+                                                {{ form.reference.errors }}
+                                        </div>
+                                        <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                    <!--end::Col-->
+                                    <!--begin::Col-->
+                                    <div class="col-md-6 fv-row fv-plugins-icon-container">
+                                        <!--end::Label-->
+                                        <label class="required fs-5 fw-bold mb-2">Date de livraison souhaitée</label>
+                                        <!--end::Label-->
+                                        <!--end::Input-->
+                                        {{form.date_souhaitee}}
+                                        <div class="fv-plugins-message-container invalid-feedback">
+                                                {{ form.date_souhaitee.errors }}
+                                        </div>
+                                        <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                    <!--end::Col-->
+                                </div>
+                                <!--end::Input group-->
+
+                                <!--begin::Input group-->
+                                <div class="d-flex flex-column mb-5">
+                                    <label class="fs-6 fw-bold mb-2">Note</label>
+                                    {{form.note}}
+                                    <div class="fv-plugins-message-container invalid-feedback">
+                                            {{ form.note.errors }}
+                                    </div>
+                                    {% comment %} <textarea class="form-control form-control-solid" rows="2" name="experience" placeholder=""></textarea> {% endcomment %}
+
+                                </div>
+                                <!--end::Input group-->
+                                <h4 class="card-title align-items-start flex-column  pt-10">
+                                    <span class="fw-bolder mb-2 text-dark">Lignes de commande</span>
+                                </h4>
+                                {% if formset.non_form_errors %}
+                                            <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
+                                                <div class="d-flex align-items-center bg-light-danger rounded p-5 mb-7" role="alert" style="width: 100%;"><b>{{ formset.non_form_errors }}</b></div>
+                                            </div>
+                                {% endif %}
+                                <div class="table-responsive">
+                                    <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <tr class="border-bottom fs-7 fw-bolder text-gray-700 text-uppercase">
+                                                <th class="required min-w-300px w-475px">Article</th>
+                                                <th class="required min-w-100px w-100px">Quantité</th>
+                                                <th class="min-w-50px w-50px text-end">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody id="ligne-table-body">
+                                            {{ formset.management_form }}
+                                            {% for f in formset %}
+                                                <tr class="border-bottom border-bottom-dashed commande-ligne-form" data-kt-element="item">
+                                                    <td class="pe-7">
+                                                        {{f.produit}}
+                                                        <div class="fv-plugins-message-container invalid-feedback">
+                                                                {{ f.non_field_errors }}
+                                                        </div>
+                                                        <div class="fv-plugins-message-container invalid-feedback">
+                                                                {{ f.produit.errors }}
+                                                        </div>
+                                                    </td>
+                                                    <td class="ps-0">
+                                                        {{f.quantite}}
+                                                        <div class="fv-plugins-message-container invalid-feedback">
+                                                                {{ f.quantite.errors }}
+                                                        </div>
+                                                    </td>
+                                                    <td class="pt-5 text-end" style="white-space: nowrap;">
+                                                        <button type="button" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm remove-item">
+                                                            <!--begin::Svg Icon | path: icons/duotone/General/Trash.svg-->
+                                                            <span class="svg-icon svg-icon-3">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                        <rect x="0" y="0" width="24" height="24"></rect>
+                                                                        <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"></path>
+                                                                        <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"></path>
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </button>
+                                                        <button type="button" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm add_more">
+                                                            <!--begin::Svg Icon | path: icons/duotone/General/Trash.svg-->
+                                                            <span class="svg-icon svg-icon-3">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z" fill="#000000" fill-rule="nonzero"/></svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <!--end::Table body-->
+                                        <tfoot>
+                                            <tr class="border-top border-top-dashed align-top fs-20 fw-bolder text-gray-700">
+                                                <th class="text-primary" colspan="3">
+                                                    <a class="btn btn-link py-1" id="add-item">Ajouter une ligne</a>
+                                                </th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                        </div>
+                        <!--end::Content-->
+                    </div>
+                    <!--end::Layout-->
+                </div>
+                <!--end::Body-->
+                {% comment %} <!--begin::Separator-->
+                <div class="separator mb-8"></div>
+                <!--end::Separator--> {% endcomment %}
+                <!--begin::Submit-->
+                <div class="card-footer d-flex justify-content-end py-6 px-9">
+                    <a  href="{% url 'base:order_list' compte.pk %}" class="btn btn-white me-3">Annuler</a>
+                    <button type="submit" class="btn btn-primary" id="kt_careers_submit_button">
+                        <!--begin::Indicator-->
+                        <span class="indicator-label">Valider la commande</span>
+                        <span class="indicator-progress">Merci de patienter...</span>
+                        <!--end::Indicator-->
+                    </button>
+                </div>
+                <!--end::Submit-->
+            </form>
+            <!--end::Form-->
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+
+{% block javascript %}
+<script>
+
+function cloneMore(selector, type) {
+    $(selector).find("select.select2-hidden-accessible").select2('destroy');
+    var newElement = $(selector).clone(true);
+    $(selector).find(".produit-select2").select2();
+
+    $(selector).find('.add_more:last').hide();
+    $(selector).find('.remove-item:last').hide();
+    var total = $('#id_' + type + '-TOTAL_FORMS').val();
+    newElement.find('.produit-select2, .quantite-input').each(function() {
+        var name = $(this).attr('name');
+        name = name.replace('-' + (total-1) + '-','-' + total + '-');
+        var id = 'id_' + name;
+        $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+    });
+    newElement.find('.produit-select2').select2();
+    newElement.find('.quantite-input').val('0');
+    newElement.find('.remove-item:last').show();
+    total++;
+    $('#id_' + type + '-TOTAL_FORMS').val(total);
+    $(selector).after(newElement);
+}
+
+
+function removeRow(selector, type) {
+    $(selector).find("select.select2-hidden-accessible").select2('destroy');
+
+    var total = $('#id_' + type + '-TOTAL_FORMS').val();
+    total--;
+    $('#id_' + type + '-TOTAL_FORMS').val(total);
+    $(selector).remove();
+    $('body').find('.add_more:last').show();
+    if (total>1){
+        $('body').find('.remove-item:last').show();
+    }
+}
+
+
+$('body').find('.add_more:not(:last)').hide();
+$('body').find('.remove-item:not(:last)').hide();
+
+
+$("#add-item").click(function() {
+    cloneMore('.commande-ligne-form:last', 'form');
+});
+
+$(".add_more").click(function() {
+    cloneMore('.commande-ligne-form:last', 'form');
+});
+$(".remove-item").click(function() {
+    removeRow('.commande-ligne-form:last', 'form');
+});
+
+
+</script>
+
+{% endblock javascript%}

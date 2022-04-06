@@ -1,0 +1,241 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% block title %}Nouvelle commande | {% endblock %}
+
+
+{% block css %} 
+{% endblock css %}
+
+{% block toolbar %}
+    <!--begin::Page title-->
+    <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+        
+        {% comment %} <!--begin::Title-->
+        <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Nouvelle commande</h1>
+        <!--end::Title-->
+        <!--begin::Separator-->
+        <span class="h-20px border-gray-200 border-start mx-4"></span>
+        <!--end::Separator--> {% endcomment %}
+        <!--begin::Breadcrumb-->
+        <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+
+            {% comment %} <!--begin::Item-->
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'base:dashboard' %}" class="text-muted text-hover-primary">Accueil</a>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <!--end::Item--> {% endcomment %}
+            <!--begin::Item-->
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'base:order_list' compte.pk %}" class="text-muted text-hover-primary">{{compte.nom}}</a>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="breadcrumb-item text-dark">Commande N° {{data.external_id}}</li>
+            <!--end::Item-->
+        </ul>
+        <!--end::Breadcrumb-->	          
+    </div>					
+{% endblock %}
+
+{% block content %}
+{% if messages %}
+    <div class="card mb-5 mb-xl-10">
+        <div class="card-body pt-9 pb-0">
+            <!--begin::Details-->
+            <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
+                    {% for message in messages %}
+                        <div {% if message.tags %} class="d-flex align-items-center bg-light-{{ message.tags }} rounded p-5 mb-7"{% endif %}  role="alert" style="width: 100%;"><b>{{ message }}</b></div>
+                    {% endfor %}
+            </div>
+            <!--end::Details-->
+        </div>
+    </div>
+{% endif %}
+<!-- begin::Invoice 1-->
+<div class="card">
+    <!--begin::Card header-->
+    <div class="card-header ">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bolder fs-3 mb-1">Commande N° {{data.external_id}}</span>
+            {% comment %} <span class="text-muted mt-1 fw-bold fs-7">20 dernières</span> {% endcomment %}
+        </h3>
+    </div>
+    <!--end::Card header-->
+	<!-- begin::Body-->
+	<div class="card-body">
+        <div class="d-flex justify-content-between flex-column flex-sm-row mb-1">
+            <!--begin::Section-->
+            <div class="d-flex  ">
+            {% comment %} justify-content-end {% endcomment %}
+                <div class="mw-300px">
+                    {% comment %} <!--begin::Label-->
+                    <div class="fw-bold fs-5 mb-3 text-dark00">BANK TRANSFER</div>
+                    <!--end::Label--> {% endcomment %}
+                    {% if user.active_accounts|length > 1 %}
+                        <!--begin::Item-->
+                        <div class="d-flex flex-stack text-gray-800 mb-3 fs-6">
+                            <!--begin::Accountname-->
+                            <div class="fw-bold pe-5">Compte :</div>
+                            <!--end::Accountname-->
+                            <!--begin::Label-->
+                            <div class="text-end fw-norma">{{compte.nom}}</div>
+                            <!--end::Label-->
+                        </div>
+                        <!--end::Item-->
+                    {% endif %}
+                    <!--begin::Item-->
+                    <div class="d-flex flex-stack text-gray-800 mb-3 fs-6">
+                        <!--begin::Accountnumber-->
+                        <div class="fw-bold pe-5">Référence :</div>
+                        <!--end::Accountnumber-->
+                        <!--begin::Number-->
+                        <div class="text-end fw-norma">{{data.reference_client}}</div>
+                        <!--end::Number-->
+                    </div>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <div class="d-flex flex-stack text-gray-800 mb-3 fs-6">
+                        <!--begin::Accountname-->
+                        <div class="fw-bold pe-5">Etat:</div>
+                        <!--end::Accountname-->
+                        <!--begin::Label-->
+                        <div class="text-end fw-norma">{{data.get_etat_badge_sc|safe}}</div>
+                        <!--end::Label-->
+                    </div>
+                    <!--end::Item-->
+                </div>
+            </div>
+            <!--end::Section-->
+            <div class="text-sm-end">
+                <div class="mw-300px">
+                    <!--begin::Item-->
+                    <div class="d-flex flex-stack text-gray-800 mb-3 fs-6">
+                        <!--begin::Accountname-->
+                        <div class="fw-bold pe-5">Date de commande :</div>
+                        <!--end::Accountname-->
+                        <!--begin::Label-->
+                        <div class="text-end fw-norma">{{data.date}}</div>
+                        <!--end::Label-->
+                    </div>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <div class="d-flex flex-stack text-gray-800 mb-3 fs-6">
+                        <!--begin::Accountname-->
+                        <div class="fw-bold pe-5">Date de livraison souhaitée :</div>
+                        <!--end::Accountname-->
+                        <!--begin::Label-->
+                        <div class="text-end fw-norma">{{data.expected_date}}</div>
+                        <!--end::Label-->
+                    </div>
+                    <!--end::Item-->
+                    {% if data.date_livraison %}
+                        <!--begin::Item-->
+                        <div class="d-flex flex-stack text-gray-800 mb-3 fs-6">
+                            <!--begin::Accountname-->
+                            <div class="fw-bold pe-5">Date de livraison effective :</div>
+                            <!--end::Accountname-->
+                            <!--begin::Label-->
+                            <div class="text-end fw-norma">{{data.date_livraison}}</div>
+                            <!--end::Label-->
+                        </div>
+                        <!--end::Item-->
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+		<!-- begin::Wrapper-->
+		<div class="mw-lg-950px mx-auto w-100  py-15">
+			<!--begin::Body-->
+			<div class="">
+				<!--begin::Wrapper-->
+				<div class="d-flex justify-content-between flex-column flex-md-row">
+					<!--begin::Content-->
+					<div class="flex-grow-1 pt-5">
+						<!--begin::Table-->
+						<div class="table-responsive border-bottom mb-14">
+							<table class="table  ">
+								<thead>
+									<tr class="border-bottom fs-6 fw-bolder text-gray-500 text-uppercase">
+										<th class="min-w-175px pb-7">Article</th>
+										<th class="min-w-70px pb-7 text-end">Quantité</th>
+									</tr>
+								</thead>
+								<tbody>
+                                    {% for l in data.lignes %}
+									<tr class="fw-bolder text-gray-700 fs-5 text-end">
+										<td class="d-flex pt-7">{{ l.produit }}</td>
+										<td class="pt-7">{{l.quantite| floatformat}}</td>
+									</tr>
+                                    {% endfor %}
+								</tbody>
+							</table>
+						</div>
+						<!--end::Table-->
+					</div>
+					<!--end::Content-->
+					{% comment %} <!--begin::Separator-->
+					<div class="border-end d-none d-md-block mh-450px mx-9"></div>
+					<!--end::Separator-->
+					<!--begin::Content-->
+					<div class="text-end pt-10">
+						<!--begin::Total Amount-->
+						<div class="fs-3 fw-bolder text-gray-400 mb-3">TOTAL AMOUNT</div>
+						<div class="fs-xl-2x fs-2 fw-boldest">$20,600.00</div>
+						<div class="text-gray-400 fw-bold">Taxes included</div>
+						<!--end::Total Amount-->
+						<div class="border-bottom w-100 my-7 my-lg-16"></div>
+						<!--begin::Invoice To-->
+						<div class="text-gray-600 fs-6 fw-bold mb-3">INVOICE TO.</div>
+						<div class="fs-6 text-gray-800 fw-bold mb-8">Iris Watson.
+						<br />Fredrick Nebraska 20620</div>
+						<!--end::Invoice To-->
+						<!--begin::Invoice No-->
+						<div class="text-gray-600 fs-6 fw-bold mb-3">INVOICE NO.</div>
+						<div class="fs-6 text-gray-800 fw-bold mb-8">56758</div>
+						<!--end::Invoice No-->
+						<!--begin::Invoice Date-->
+						<div class="text-gray-600 fs-6 fw-bold mb-3">DATE</div>
+						<div class="fs-6 text-gray-800 fw-bold">12 May, 2020</div>
+						<!--end::Invoice Date-->
+					</div> {% endcomment %}
+					<!--end::Content-->
+				</div>
+				<!--end::Wrapper-->
+			</div>
+			<!--end::Body-->
+		</div>
+		<!-- end::Wrapper-->
+	</div>
+	<!-- end::Body-->
+    <!--begin::Submit-->
+    <div class="card-footer d-flex justify-content-end">
+        <a href="{% url 'base:order_list' compte.pk %}" class="btn btn-white me-3">Retour</a>
+        <!-- begin::Pint-->
+        <a  href="{% url 'base:order_renew' compte_id=compte.pk commande_id=commande_id %}" 
+                type="button" class="btn btn-primary my-1" >
+                    <span class="svg-icon svg-icon-1"><i class="fas fa-redo  fs-2"></i></span>Renouveler cette commande</a>
+    </div>
+    <!--end::Submit-->
+</div>
+<!-- end::Invoice 1-->
+{% endblock content %}
+
+
+
+{% block javascript %}
+<script>
+
+</script>
+
+{% endblock javascript%}

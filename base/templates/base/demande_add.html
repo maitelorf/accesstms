@@ -1,0 +1,180 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% block title %}Nous contacter | {% endblock %}
+
+{% block css %} 
+{% endblock css %}
+
+
+{% block toolbar %}
+    <!--begin::Page title-->
+    <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+        
+        {% comment %} <!--begin::Title-->
+        <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Sécurité et connexion</h1>
+        <!--end::Title-->
+        <!--begin::Separator-->
+        <span class="h-20px border-gray-200 border-start mx-4"></span>
+        <!--end::Separator--> {% endcomment %}
+        <!--begin::Breadcrumb-->
+        <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+
+            {% comment %} <!--begin::Item-->
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'base:dashboard' %}" class="text-muted text-hover-primary">Accueil</a>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <!--end::Item--> {% endcomment %}
+            <!--begin::Item-->
+            <li class="breadcrumb-item text-dark">Nous contacter</li>
+            <!--end::Item-->
+        </ul>
+        <!--end::Breadcrumb-->	
+        <!--end::Page title-->
+                        
+    </div>
+        {% comment %} <div class="d-flex align-items-center py-1">
+            <!--begin::Button-->
+            <a href="{% url 'base:order_add' compte.pk %}" class="btn btn-sm btn-primary">Nouvelle commande</a>
+            <!--end::Button-->
+        </div> {% endcomment %}
+{% endblock %}
+
+
+{% block content %}
+
+<!--begin::Form-->
+    <div class="card">
+        <!--begin::Card header-->
+        <div class="card-header border-0" >
+            <!--begin::Card title-->
+            <div class="card-title m-0">
+                <h3 class="fw-bolder m-0">Formulaire de contact</h3>
+            </div>
+            <!--end::Card title-->
+        </div>
+        <!--begin::Card header-->
+        <!--begin::Content-->
+        <div id="kt_account_profile_details">
+            <!--begin::Form-->
+            <form class="form"  autocomplete="off" method="post" novalidate="novalidate" >
+                {% csrf_token %}
+                <!--begin::Card body-->
+                <div class="card-body border-top p-9">
+                    {% if messages %}
+                        <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
+                                {% for message in messages %}
+                                    <div {% if message.tags %} class="d-flex align-items-center bg-light-{{ message.tags }} rounded p-5 mb-7"{% endif %}  role="alert" style="width: 100%;"><b>{{ message }}</b></div>
+                                {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% comment %} Cas des erreurs sur le formulaire {% endcomment %}
+                    {% if form.non_field_errors %}
+                                <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
+                                    <div class="d-flex align-items-center bg-light-danger rounded p-5 mb-7" role="alert" style="width: 100%;"><b>{{ form.non_field_errors }}</b></div>
+                                </div>
+                    {% endif %}
+
+
+                    
+                    <!--begin::Input group-->
+                    <div class="row mb-6">
+                        {% with dem_comptes=user.accounts_pour_demandes %}
+                            {% if dem_comptes|length != 1 %}
+                                <!--begin::Label-->
+                                <label class="col-lg-4 col-form-label fw-bold required fs-6">Compte concerné</label>
+                                <!--end::Label-->
+                            {% endif %}
+                        {% endwith %}
+                        <!--begin::Col-->
+                        <div class="col-lg-8 fv-row">
+                            {{form.compte}}
+                            <div class="fv-plugins-message-container invalid-feedback">
+                                    {{ form.compte.errors }}
+                            </div>
+                            {% comment %} <input type="text" name="company" class="form-control form-control-lg form-control-solid" placeholder="Company name" value="Keenthemes" /> {% endcomment %}
+                        </div>
+                        <!--end::Col-->
+                    </div>
+                    <!--end::Input group-->
+                    
+                    <!--begin::Input group-->
+                    <div class="row mb-6">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 col-form-label required  fw-bold fs-6">Type</label>
+                        <!--end::Label-->
+                        <!--begin::Col-->
+                        <div class="col-lg-8 fv-row">
+                            {{form.type}}
+                            <div class="fv-plugins-message-container invalid-feedback">
+                                    {{ form.type.errors }}
+                            </div>
+                            {% comment %} <input type="text" name="company" class="form-control form-control-lg form-control-solid" placeholder="Company name" value="Keenthemes" /> {% endcomment %}
+                        </div>
+                        <!--end::Col-->
+                    </div>
+                    <!--end::Input group-->
+                    
+                    <!--begin::Input group-->
+                    <div class="row mb-6">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 col-form-label  required fw-bold fs-6">Détails</label>
+                        <!--end::Label-->
+                        <!--begin::Col-->
+                        <div class="col-lg-8 fv-row">
+                            {{form.note}}
+                            <div class="fv-plugins-message-container invalid-feedback">
+                                    {{ form.note.errors }}
+                            </div>
+                            {% comment %} <input type="text" name="company" class="form-control form-control-lg form-control-solid" placeholder="Company name" value="Keenthemes" /> {% endcomment %}
+                        </div>
+                        <!--end::Col-->
+                    </div>
+                    <!--end::Input group-->
+                            
+                    <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6">
+                        <!--begin::Icon-->
+                        <!--begin::Svg Icon | path: icons/duotone/Design/Select.svg-->
+                        <span class="svg-icon svg-icon-2tx svg-icon-primary me-4">
+                            <i class="fas text-primary fa-phone  fs-2x"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <!--end::Icon-->
+                        <!--begin::Wrapper-->
+                        <div class="d-flex flex-stack flex-grow-1">
+                            <!--begin::Content-->
+                            <div class="fw-bold">
+                                <div class="fs-6 text-gray-600">Vous pouvez également joindre notre Service Client par téléphone au <b><u>07 01 01 01 07</u></b>.</div>
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+
+                </div>
+                <!--end::Card body-->
+                <!--begin::Actions-->
+                <div class="card-footer d-flex justify-content-end py-6 px-9">
+                    <a href="{% url 'base:dashboard' %}" class="btn btn-white btn-active-light-primary me-2">Annuler</a>
+                    <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">Envoyer</button>
+                </div>
+                <!--end::Actions-->
+            </form>
+            <!--end::Form-->
+        </div>
+        <!--end::Content-->
+    </div>
+
+{% endblock content %}
+
+
+
+{% block javascript %}
+{% comment %} <script>
+</script> {% endcomment %}
+{% endblock javascript%}

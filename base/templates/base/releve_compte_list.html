@@ -1,0 +1,219 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% block title %}Postes non soldées | {% endblock %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static 'assets/plugins/custom/bootstrap-table-1.19.1/bootstrap-table.min.css' %}">
+{% endblock css %}
+
+
+{% block toolbar %}
+    <!--begin::Page title-->
+    <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+        
+        {% comment %} <!--begin::Title-->
+        <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Postes non soldées</h1>
+        <!--end::Title-->
+        <!--begin::Separator-->
+        <span class="h-20px border-gray-200 border-start mx-4"></span>
+        <!--end::Separator--> {% endcomment %}
+        <!--begin::Breadcrumb-->
+        <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+
+            {% comment %} <!--begin::Item-->
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'base:dashboard' %}" class="text-muted text-hover-primary">Accueil</a>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <!--end::Item--> {% endcomment %}
+            <!--begin::Item-->
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'base:order_list' compte.pk %}" class="text-muted text-hover-primary">{{compte.nom}}</a>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="breadcrumb-item text-dark">Postes non soldées</li>
+            <!--end::Item-->
+        </ul>
+        <!--end::Breadcrumb-->	
+        <!--end::Page title-->
+                        
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    {% if messages %}
+        <div class="card ">
+            <div class="card-body">
+                <!--begin::Details-->
+                <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
+                        {% for message in messages %}
+                            <div {% if message.tags %} class="d-flex align-items-center bg-light-{{ message.tags }} rounded p-5 mb-7"{% endif %}  role="alert" style="width: 100%;"><b>{{ message }}</b></div>
+                        {% endfor %}
+                </div>
+                <!--end::Details-->
+            </div>
+        </div>
+    {% endif %}
+    <div class="card">
+        <!--begin::Card header-->
+        <div class="card-header ">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bolder fs-3 mb-1">Postes non soldées</span>
+                {% comment %} <span class="text-muted mt-1 fw-bold fs-7">20 dernières</span> {% endcomment %}
+            </h3>
+        </div>
+        <!--end::Card header-->
+        <!--begin::Card body-->
+        <div class="card-body pt-5">
+            <!--begin::Table-->
+            <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                <div class="table-responsive">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer  table-striped "
+                        data-header-style="headerStyle"=
+                         id="order_table">
+
+                    </table>
+                </div>
+                {% comment %} <div class="row">
+                    <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"></div>
+                    <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+                        <div class="dataTables_paginate paging_simple_numbers" id="kt_table_users_paginate">
+                            <ul class="pagination">
+                                <li class="paginate_button page-item previous disabled" id="kt_table_users_previous"><a href="#" aria-controls="kt_table_users" data-dt-idx="0" tabindex="0" class="page-link"><i class="previous"></i></a></li>
+                                <li class="paginate_button page-item active"><a href="#" aria-controls="kt_table_users" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+                                <li class="paginate_button page-item "><a href="#" aria-controls="kt_table_users" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
+                                <li class="paginate_button page-item "><a href="#" aria-controls="kt_table_users" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
+                                <li class="paginate_button page-item next" id="kt_table_users_next"><a href="#" aria-controls="kt_table_users" data-dt-idx="4" tabindex="0" class="page-link"><i class="next"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+            <!--end::Table-->
+            <div class="d-flex justify-content-end pt-3">
+                <!--begin::Section-->
+                <div class="mw-300px">
+                    <!--begin::Item-->
+                    <div class="d-flex flex-stack mb-3">
+                        <!--begin::Accountname-->
+                        <div class="fw-bold pe-20 text-gray-600 fs-6">Factures échues :</div>
+                        <!--end::Accountname-->
+                        <!--begin::Label-->
+                        <div class="text-end fw-bolder fs-6 text-gray-800">{{montant_echu|floatformat:2}}</div>
+                        <!--end::Label-->
+                    </div>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <div class="d-flex flex-stack mb-3">
+                        <!--begin::Accountname-->
+                        <div class="fw-bold pe-20 text-gray-600 fs-6">Factures non échues :</div>
+                        <!--end::Accountname-->
+                        <!--begin::Label-->
+                        <div class="text-end fw-bolder fs-6 text-gray-800">{{montant_non_echu|floatformat:2}}</div>
+                        <!--end::Label-->
+                    </div>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <div class="d-flex flex-stack mb-3">
+                        <!--begin::Accountnumber-->
+                        <div class="fw-bold pe-20 text-gray-600 fs-6">Total dû :</div>
+                        <!--end::Accountnumber-->
+                        <!--begin::Number-->
+                        <div class="text-end fw-bolder fs-6 text-gray-800">{{montant_du|floatformat:2}}</div>
+                        <!--end::Number-->
+                    </div>
+                    <!--end::Item-->
+                </div>
+                <!--end::Section-->
+            </div>
+
+
+        </div>
+        <!--end::Card body-->
+    </div>
+
+{% endblock content %}
+
+
+
+{% block javascript %}
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="{% static 'assets/plugins/custom/bootstrap-table-1.19.1/bootstrap-table.min.js' %}"></script>
+<!-- Latest compiled and minified Locales -->
+<script src="{% static 'assets/plugins/custom/bootstrap-table-1.19.1/bootstrap-table-fr-FR.min.js' %}"></script>
+<script>
+    order_data = {{ data | safe}};
+    $('#order_table').bootstrapTable({
+        pagination: false,
+        search: false,
+        columns: [{
+            field: 'external_id',
+            title: 'Numéro'
+        },{
+            field: 'date',
+            title: 'Date'
+        }, {
+            field: 'echeance',
+            title: 'Echéance'
+        },{
+            field: 'description',
+            title: 'Description'
+        }, {
+            field: 'montant_ttc',
+            align : "right",
+            title: 'Montant TTC',
+        }],
+        data: order_data
+    });
+
+function headerStyle(column) {
+    return {
+        date: {
+            css: {
+                "font-weight": 'bold',
+                "text-transform" : "uppercase"
+            }
+        },
+        echeance : {
+            css: {
+                "font-weight": 'bold',
+                "text-transform" : "uppercase"
+            }
+        },
+        description : {
+            css: {
+                "font-weight": 'bold',
+                "text-transform" : "uppercase"
+            }
+        },
+        external_id : {
+            css: {
+                "font-weight": 'bold',
+                "text-transform" : "uppercase"
+            }
+        },
+        montant_ttc : {
+            css: {
+                "font-weight": 'bold',
+                "text-transform" : "uppercase",
+                "text-align" : "right"
+            }
+        }
+    }[column.field]
+}
+
+</script>
+{% endblock javascript%}
